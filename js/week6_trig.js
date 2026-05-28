@@ -40,7 +40,8 @@ function animate()
 	//w and s move forward and backward
 	//a and d rotate the triangle
 	angularMovement();
-	
+	follow();
+
 	//-------------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------------------INSTRUCTIONS-------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------
@@ -54,6 +55,14 @@ function animate()
 	
 	player.drawTriangle();
 	pearl.drawCircle();
+
+	
+	if (pearl.hitTestObject(player))
+	{
+		pearl.x = -10000;
+		pearl.y = -10000;
+	}
+
 }
 
 function angularMovement()
@@ -94,6 +103,7 @@ function angularMovement()
 	{
 		player.angle+=2;
 	}
+	
 
 	//apply physics to velocity
 	player.vx *= fX;
@@ -106,3 +116,19 @@ function angularMovement()
 	player.move();
 }
 
+function follow()
+{
+    var dx = player.x - pearl.x;
+    var dy = player.y - pearl.y;
+    var radians = Math.atan2(dy,dx);
+
+	if (dx < 300 && dx > -300 && dy < 300 && dy > -300)
+    {pearl.angle = radians * 180/Math.PI;
+
+    pearl.vx = Math.cos(radians) * pearl.force;
+    pearl.vy = Math.sin(radians) * pearl.force;
+
+    pearl.x += pearl.vx * .5;
+    pearl.y += pearl.vy * .5;}
+	
+}
